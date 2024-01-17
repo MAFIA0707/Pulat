@@ -1,14 +1,19 @@
-const express = require('express')
-const addressRoute = express.Router()
-const { createAddress, findAllAddress,findAddressById,updateAddress,deleteAddress } = require("../controller/address.controller")
-const authGuard = require("../middleware/auth.guard")
-const app = express()
+const express = require("express");
+const addressesRoute = express.Router();
+const {
+  createAddresses,
+  findAllAddresses,
+  findAddressesById,
+  updateAddresses,
+  deleteAddresses,
+} = require("../controller/address.controller");
+const authGuard = require("../middleware/auth.guard");
+const roleGuard = require("../middleware/role.guard");
 
+addressesRoute.post("/", authGuard, roleGuard('user'), createAddresses);
+addressesRoute.get("/addresses", findAllAddresses);
+addressesRoute.get("/:id", authGuard,roleGuard ('moderator'), findAddressesById);
+addressesRoute.patch("/:id", authGuard,roleGuard ('moderator'), updateAddresses);
+addressesRoute.delete("/:id", authGuard,roleGuard ('user'), deleteAddresses);
 
-addressRoute.post("/",createAddress)
-addressRoute.get("/", findAllAddress)
-addressRoute.get("/:id", findAddressById)
-addressRoute.patch("/:id", updateAddress)
-addressRoute.delete("/:id", deleteAddress)
-
-module.exports=addressRoute
+module.exports = addressesRoute;

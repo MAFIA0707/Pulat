@@ -29,12 +29,12 @@ async function register(req, res) {
     const accessToken = sign(
       { id: insertId, role: "user" },
       env.ACCESS_TOKEN_SECRETS,
-      { expiresIn: "600s" }
+      { expiresIn: "1d" }
     );
     const refreshToken = sign(
       { id: insertId, role: "user" },
       env.REFRESH_TOKEN_SECRETS,
-      { expiresIn: "1800s" }
+      { expiresIn: "2d" }
     );
     res.json({ refreshToken, accessToken });
   } catch (error) {
@@ -71,12 +71,12 @@ async function login(req, res) {
     const accesToken = sign(
       { id: user.id, role: user.role },
       env.ACCESS_TOKEN_SECRETS,
-      { expiresIn: "2400s" }
+      { expiresIn: "1d" }
     );
     const refreshToken = sign(
       { id: user.id, role: user.role },
       env.REFRESH_TOKEN_SECRETS,
-      { expiresIn: "3000s" }
+      { expiresIn: "2d" }
     );
     const hashedRefreshToken = hashSync(refreshToken, 1);
     await db.query("UPDATE users SET hashed_token=? WHERE id=?", [
@@ -114,12 +114,12 @@ async function refresh(req, res) {
     const accesToken = sign(
       { id: user.id, role: user.role },
       env.ACCESS_TOKEN_SECRETS,
-      { expiresIn: "60s" }
+      { expiresIn: "1d" }
     );
     const refreshToken = sign(
       { id: user.id, role: user.role },
       env.ACCESS_TOKEN_SECRETS,
-      { expiresIn: "180s" }
+      { expiresIn: "2d" }
     );
     res.json({ refreshToken, accesToken });
     hashedRefreshToken = hashSync(refreshToken, 1);

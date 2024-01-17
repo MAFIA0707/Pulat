@@ -1,14 +1,13 @@
 const db = require ("../config/db.config")
 const Pagination = require("../helpers/pagiantion")
-const attributeRoute = require("../routes/attributes.route.js")
 const apiResponse = require("../helpers/apiResponse.helpers") 
 
 
-function createAttribute(req, res){
+function createAttributes(req, res){
     try {
-        sqlQuery = 'INSERT INTO attributes ( name_uz, name_ru	) VALUES (?,?)'
+       const sqlQuery = 'INSERT INTO attributes ( name_uz, name_ru	) VALUES (?,?)'
         const {name_uz, name_ru	} = req.body
-        db.query([name_uz, name_ru	])
+        db.query(sqlQuery,[name_uz, name_ru	])
       
     
         res.send("work")
@@ -17,7 +16,7 @@ function createAttribute(req, res){
       }
 }
 
- async function findAllAttribute(req, res){
+ async function findAllAttributes(req, res){
     try {
         const page = req.query.page
         const limit = req.query.limit
@@ -37,7 +36,7 @@ function createAttribute(req, res){
     }
  }
 
- async function findAttributeById(req, res){
+ async function findAttributesById(req, res){
     try {
         const id = req.params.id
         const sqlQuery = "SELECT * FROM attributes WHERE id =?"
@@ -49,7 +48,7 @@ function createAttribute(req, res){
     }
  }
 
- async function updateAttribute(req, res){
+ async function updateAttributes(req, res){
     try {
         const id = req.params.id;
         const selectSql = "SELECT * FROM attributes WHERE id = ?";
@@ -59,9 +58,9 @@ function createAttribute(req, res){
           error.status = 404;
           throw error;
         }
-        const { name_uz, name_ru	 } = req.body;
-        const updateSql = "UPDATE attributes SET  name_uz = ? name_ru = ?	 WHERE id = ?";
-        await db.query(updateSql, [name_uz, name_ru	, id]);
+      
+        const updateSql = "UPDATE attributes SET ?	 WHERE id = ?";
+        await db.query(updateSql, [req.body, id]);
         res.send("Information  update");
       } catch (error) {
         res.status(error.status || 500).json({ error: error.message });
@@ -70,7 +69,7 @@ function createAttribute(req, res){
  }
 
 
- async function deleteAttribute(req, res){
+ async function deleteAttributes(req, res){
     try {
         const productsId = req.params.id;
         const query = "DELETE FROM attributes WHERE id =?";
@@ -85,9 +84,9 @@ function createAttribute(req, res){
  }
 
  module.exports={
-    createAttribute,
-    findAllAttribute,
-    findAttributeById,
-    updateAttribute,
-    deleteAttribute
+    createAttributes,
+    findAllAttributes,
+    findAttributesById,
+    updateAttributes,
+    deleteAttributes
  }

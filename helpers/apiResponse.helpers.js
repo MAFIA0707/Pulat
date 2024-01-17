@@ -5,6 +5,6 @@ function apiResponse(res, statusCode, data, error, pagiantion) {
         pagiantion: pagiantion || null,
         date:new Date
     }
-    res.send(statusCode(200).json(response))
+    res.status(201).json(response)
 }
 module.exports=apiResponse
